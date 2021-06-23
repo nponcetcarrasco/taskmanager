@@ -1,7 +1,7 @@
 package com.taskmanager.queue.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,13 +11,11 @@ import com.taskmanager.queue.IQueue;
 
 public class ListQueueImpl implements IQueue {
 
-	private LinkedList<Task> tasks;
-	private Iterator<Task> iterator;
+	private Deque<Task> tasks;
 	private List<ITaskDispatcher> subscribers;
 
 	public ListQueueImpl() {
 		tasks = new LinkedList<>();
-		iterator = tasks.listIterator();
 		subscribers = new ArrayList<>();
 	}
 

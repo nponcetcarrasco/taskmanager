@@ -1,19 +1,18 @@
-package com.taskmanager.dispatcher;
+package com.taskmanager.dispatcher.impl;
 
+import com.taskmanager.dispatcher.ITaskDispatcher;
 import com.taskmanager.model.Task;
 import com.taskmanager.model.TaskStatus;
 import com.taskmanager.queue.IQueue;
-import com.taskmanager.repository.TaskRepository;
-import com.taskmanager.runner.ITaskRunner;
+import com.taskmanager.repository.Repository;
+import com.taskmanager.runner.impl.TaskRunner;
 
 public class TaskDispatcher implements ITaskDispatcher {
 
-	private TaskRepository repository;
-	private ITaskRunner taskRunner;
+	private Repository<Task> repository;
 
-	public TaskDispatcher(TaskRepository repository, ITaskRunner taskRunner){
+	public TaskDispatcher(Repository<Task> repository){
 		this.repository = repository;
-		this.taskRunner = taskRunner;
 	}
 
 	@Override
@@ -23,7 +22,7 @@ public class TaskDispatcher implements ITaskDispatcher {
 		if (task == null) return;
 		task.setStatus(TaskStatus.RUNNING);
 		this.repository.save(task);
-		this.taskRunner.run(task);
+		new Thread(new TaskRunner(task, repository)).start();
 	}
 
 }

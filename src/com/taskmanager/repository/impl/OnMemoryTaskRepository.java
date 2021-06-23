@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.taskmanager.model.Task;
-import com.taskmanager.repository.TaskRepository;
+import com.taskmanager.repository.Repository;
 
-public class OnMemoryTaskRepository implements TaskRepository {
+public class OnMemoryTaskRepository implements Repository<Task> {
 
 	private Map<Long, Task> tasks;
 	private Long sequenceID;

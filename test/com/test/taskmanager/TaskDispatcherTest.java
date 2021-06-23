@@ -7,26 +7,28 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.taskmanager.dispatcher.ITaskDispatcher;
-import com.taskmanager.dispatcher.TaskDispatcher;
+import com.taskmanager.dispatcher.impl.TaskDispatcher;
 import com.taskmanager.model.Task;
 import com.taskmanager.model.TaskStatus;
 import com.taskmanager.queue.IQueue;
 import com.taskmanager.queue.impl.ListQueueImpl;
-import com.taskmanager.repository.TaskRepository;
+import com.taskmanager.repository.Repository;
 import com.taskmanager.repository.impl.OnMemoryTaskRepository;
+import com.taskmanager.task.impl.DummyTask;
+import com.taskmanager.task.impl.DummyTaskConfiguration;
 
 public class TaskDispatcherTest {
 
 	ITaskDispatcher dispatcher;
 	ITaskDispatcher dispatcher2;
 	IQueue queue;
-	TaskRepository<Test> repository;
+	Repository<Task> repository;
 
 	@Before
 	public void init() {
 		repository = new OnMemoryTaskRepository();
-		dispatcher = new TaskDispatcher(repository, task -> {});
-		dispatcher2 = new TaskDispatcher(repository, task -> {});
+		dispatcher = new TaskDispatcher(repository);
+		dispatcher2 = new TaskDispatcher(repository);
 		queue = new ListQueueImpl();
 	}
 
@@ -34,6 +36,8 @@ public class TaskDispatcherTest {
 	public void testDispatcherOKManualCall() {
 		Task task = new Task();
 		task.setId(1L);
+		task.setTaskClass(DummyTask.class);
+		task.setConfigurationClass(DummyTaskConfiguration.class);
 		task.setStatus(TaskStatus.QUEUED);
 		queue.enqueue(task);
 		dispatcher.dispatch(queue);
@@ -47,6 +51,8 @@ public class TaskDispatcherTest {
 		queue.subscribe(dispatcher);
 		Task task = new Task();
 		task.setId(2L);
+		task.setTaskClass(DummyTask.class);
+		task.setConfigurationClass(DummyTaskConfiguration.class);
 		task.setStatus(TaskStatus.QUEUED);
 		queue.enqueue(task);
 		task = repository.get(2L).orElse(null);
@@ -60,6 +66,8 @@ public class TaskDispatcherTest {
 		queue.subscribe(dispatcher2);
 		Task task = new Task();
 		task.setId(3L);
+		task.setTaskClass(DummyTask.class);
+		task.setConfigurationClass(DummyTaskConfiguration.class);
 		task.setStatus(TaskStatus.QUEUED);
 		queue.enqueue(task);
 		task = repository.get(3L).orElse(null);
