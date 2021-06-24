@@ -10,7 +10,7 @@ public class DummyFailUnexpectedTask implements ITask {
 
 	@Override
 	public TaskFlowStatus execute(ITaskConfiguration configuration) {
-		if (fail) throw new NullPointerException("crash");
+		if (fail) throw new NullPointerException("Expected nullpointer exception");
 		return TaskFlowStatus.SUCCESS;
 	}
 
